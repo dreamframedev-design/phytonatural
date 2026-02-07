@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 const navLinks = [
   { label: 'Research', href: '#research' },
@@ -27,33 +26,27 @@ export default function Navigation() {
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-2' : 'py-4'
-          }`}
-      >
-        {/* Backdrop Blur & Gradient Background */}
-        <div className={`absolute inset-0 transition-opacity duration-300 ${scrolled ? 'opacity-100 shadow-lg' : 'opacity-95'
-          }`}>
-          <div className="absolute inset-0 bg-gradient-to-r from-jet-black via-dark-teal to-jet-black backdrop-blur-md" />
-          <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-teal/50 to-transparent" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+      <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4 pointer-events-none">
+        <motion.nav
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className={`pointer-events-auto relative backdrop-blur-xl transition-all duration-300 rounded-full border border-white/10 shadow-2xl ${scrolled
+            ? 'bg-jet-black/80 px-6 py-3 w-auto'
+            : 'bg-jet-black/60 px-8 py-4 w-full max-w-5xl'
+            }`}
+        >
+          <div className="flex items-center justify-between gap-8">
             {/* Logo */}
-            {/* Logo - Horizontal Lockup Reconstructed */}
-            <a href="/" className="flex items-center gap-3 group">
-              <div className="relative h-10 w-10 shrink-0 transition-transform duration-300 group-hover:scale-110">
+            <a href="/" className="flex items-center gap-3 group shrink-0">
+              <div className="relative h-8 w-8 transition-transform duration-300 group-hover:rotate-12">
                 <img
                   src="/images/phyto logos_icon.svg"
                   alt="PhytoNatural Icon"
                   className="w-full h-full object-contain brightness-0 invert"
                 />
               </div>
-              <div className="relative h-5 w-32 transition-transform duration-300 group-hover:translate-x-1">
+              <div className={`relative h-4 w-28 transition-all duration-300 ${scrolled ? 'hidden md:block' : 'block'}`}>
                 <img
                   src="/images/wordmark final123.svg"
                   alt="PhytoNatural"
@@ -68,16 +61,20 @@ export default function Navigation() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-full transition-all duration-300 relative group overflow-hidden"
+                  className="relative px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors duration-300 group"
                 >
                   <span className="relative z-10">{link.label}</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-teal/20 to-strong-cyan/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="absolute inset-x-0 bottom-1 h-px bg-strong-cyan scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                  <span className="absolute inset-0 bg-white/5 rounded-full scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 -z-10" />
                 </a>
               ))}
+            </div>
 
+            {/* CTA */}
+            <div className="hidden lg:block shrink-0">
               <a
                 href="/deal"
-                className="ml-4 px-6 py-2.5 bg-gradient-to-r from-teal to-strong-cyan text-white text-sm font-semibold rounded-full shadow-lg shadow-teal/20 hover:shadow-strong-cyan/30 hover:scale-105 transition-all duration-300"
+                className="px-5 py-2 bg-gradient-to-r from-teal to-strong-cyan text-white text-sm font-bold rounded-full shadow-lg shadow-teal/20 hover:shadow-strong-cyan/40 hover:scale-105 transition-all duration-300"
               >
                 Partner Access
               </a>
@@ -92,34 +89,50 @@ export default function Navigation() {
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
-        </div>
-      </motion.nav>
+        </motion.nav>
+      </div>
 
       {/* Mobile Navigation Drawer */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: '100vh' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-40 bg-jet-black pt-24 lg:hidden overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-jet-black/95 backdrop-blur-xl lg:hidden flex items-center justify-center"
           >
-            <div className="px-6 py-6 space-y-6">
+            <div className="flex flex-col items-center space-y-8 p-8">
               {navLinks.map((link, i) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="block text-2xl font-light text-white hover:text-strong-cyan transition-colors"
+                  className="text-3xl font-light text-white hover:text-strong-cyan transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
                   {link.label}
                 </motion.a>
               ))}
+              <motion.a
+                href="/deal"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mt-8 px-8 py-3 bg-gradient-to-r from-teal to-strong-cyan text-white text-lg font-bold rounded-full"
+                onClick={() => setIsOpen(false)}
+              >
+                Partner Access
+              </motion.a>
             </div>
+
+            <button
+              onClick={() => setIsOpen(false)}
+              className="absolute top-8 right-8 p-2 text-white/50 hover:text-white"
+            >
+              <X className="w-8 h-8" />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>
