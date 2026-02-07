@@ -6,10 +6,9 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 const navLinks = [
-  { label: 'Cultivation', href: '#platform' },
-  { label: 'Processing', href: '#innovation' },
-  { label: 'Product Development', href: '#innovation' },
-  { label: 'Retail', href: '#platform' },
+  { label: 'Research', href: '#research' },
+  { label: 'Innovation', href: '#innovation' },
+  { label: 'Platform', href: '#platform' },
   { label: 'Investors', href: '/deal' },
   { label: 'Contact', href: '#contact' },
 ];
