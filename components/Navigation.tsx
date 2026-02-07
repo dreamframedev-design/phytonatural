@@ -133,7 +133,7 @@ export default function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-jet-black/95 backdrop-blur-xl lg:hidden flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-jet-black/95 backdrop-blur-md lg:hidden flex items-center justify-center"
           >
             <div className="flex flex-col items-center space-y-8 p-8">
               {navLinks.map((link, i) => (

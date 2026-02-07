@@ -13,20 +13,18 @@ export default function Hero() {
                     animate={{
                         scale: [1, 1.2, 1],
                         rotate: [0, 90, 0],
-                        filter: ["blur(100px)", "blur(150px)", "blur(100px)"]
                     }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-strong-cyan/20 rounded-full"
+                    className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-strong-cyan/20 rounded-full blur-[80px]"
                 />
                 <motion.div
                     animate={{
                         scale: [1.2, 1, 1.2],
                         rotate: [0, -90, 0],
                         x: [0, 100, 0],
-                        filter: ["blur(120px)", "blur(160px)", "blur(120px)"]
                     }}
                     transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                    className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-teal/20 rounded-full"
+                    className="absolute bottom-[-20%] right-[-10%] w-[800px] h-[800px] bg-teal/20 rounded-full blur-[100px]"
                 />
             </div>
 
