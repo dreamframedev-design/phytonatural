@@ -10,10 +10,30 @@ export default function ContactSection() {
         email: '',
         message: '',
     });
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('Form submitted:', formData);
+        setStatus('submitting');
+
+        try {
+            const response = await fetch('https://formspree.io/f/maqdyebz', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                setStatus('success');
+                setFormData({ name: '', email: '', message: '' });
+            } else {
+                setStatus('error');
+            }
+        } catch (error) {
+            setStatus('error');
+        }
     };
 
     return (
@@ -39,8 +59,8 @@ export default function ContactSection() {
                         </p>
 
                         <div className="space-y-8">
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center shrink-0">
+                            <div className="flex items-start gap-4 group">
+                                <div className="w-12 h-12 rounded-full bg-teal/10 flex items-center justify-center shrink-0 group-hover:bg-teal/20 transition-colors">
                                     <div className="w-2 h-2 rounded-full bg-teal" />
                                 </div>
                                 <div>
@@ -49,8 +69,8 @@ export default function ContactSection() {
                                 </div>
                             </div>
 
-                            <div className="flex items-start gap-4">
-                                <div className="w-12 h-12 rounded-full bg-strong-cyan/10 flex items-center justify-center shrink-0">
+                            <div className="flex items-start gap-4 group">
+                                <div className="w-12 h-12 rounded-full bg-strong-cyan/10 flex items-center justify-center shrink-0 group-hover:bg-strong-cyan/20 transition-colors">
                                     <div className="w-2 h-2 rounded-full bg-strong-cyan" />
                                 </div>
                                 <div>
@@ -67,80 +87,116 @@ export default function ContactSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="bg-white-smoke p-8 md:p-12 rounded-3xl"
+                        className="bg-white-smoke p-8 md:p-12 rounded-3xl relative overflow-hidden"
                     >
-                        <form onSubmit={handleSubmit} className="space-y-8">
-                            {/* Name */}
-                            <div className="relative group">
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    placeholder=" "
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent"
-                                    required
-                                />
-                                <label
-                                    htmlFor="name"
-                                    className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
-                                >
-                                    Full Name
-                                </label>
-                            </div>
-
-                            {/* Email */}
-                            <div className="relative group">
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    placeholder=" "
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent"
-                                    required
-                                />
-                                <label
-                                    htmlFor="email"
-                                    className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
-                                >
-                                    Email Address
-                                </label>
-                            </div>
-
-                            {/* Message */}
-                            <div className="relative group">
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    placeholder=" "
-                                    rows={4}
-                                    value={formData.message}
-                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                                    className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent resize-none"
-                                    required
-                                />
-                                <label
-                                    htmlFor="message"
-                                    className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
-                                >
-                                    Message
-                                </label>
-                            </div>
-
-                            {/* Submit Button */}
-                            <motion.button
-                                type="submit"
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="w-full inline-flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-jet-black to-dark-teal text-white font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all"
+                        {status === 'success' ? (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-white/50 backdrop-blur-sm"
                             >
-                                <span>Send Message</span>
-                                <ArrowRight className="w-5 h-5" />
-                            </motion.button>
-                        </form>
+                                <div className="w-20 h-20 bg-teal/10 rounded-full flex items-center justify-center mb-6 text-teal">
+                                    <Send className="w-10 h-10" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-jet-black mb-2">Message Sent!</h3>
+                                <p className="text-slate-600">Thank you for reaching out. We'll get back to you shortly.</p>
+                                <button
+                                    onClick={() => setStatus('idle')}
+                                    className="mt-8 text-sm font-semibold text-teal hover:underline"
+                                >
+                                    Send another message
+                                </button>
+                            </motion.div>
+                        ) : (
+                            <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+                                {/* Name */}
+                                <div className="relative group">
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        placeholder=" "
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent"
+                                        required
+                                        disabled={status === 'submitting'}
+                                    />
+                                    <label
+                                        htmlFor="name"
+                                        className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
+                                    >
+                                        Full Name
+                                    </label>
+                                </div>
+
+                                {/* Email */}
+                                <div className="relative group">
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder=" "
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent"
+                                        required
+                                        disabled={status === 'submitting'}
+                                    />
+                                    <label
+                                        htmlFor="email"
+                                        className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
+                                    >
+                                        Email Address
+                                    </label>
+                                </div>
+
+                                {/* Message */}
+                                <div className="relative group">
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        placeholder=" "
+                                        rows={4}
+                                        value={formData.message}
+                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                        className="peer w-full px-0 py-4 bg-transparent border-b-2 border-slate-300 focus:border-teal outline-none transition-colors text-jet-black placeholder-transparent resize-none"
+                                        required
+                                        disabled={status === 'submitting'}
+                                    />
+                                    <label
+                                        htmlFor="message"
+                                        className="absolute left-0 -top-3.5 text-sm text-slate-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-4 peer-focus:-top-3.5 peer-focus:text-teal peer-focus:text-sm"
+                                    >
+                                        Message
+                                    </label>
+                                </div>
+
+                                {status === 'error' && (
+                                    <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm">
+                                        Something went wrong. Please try again later.
+                                    </div>
+                                )}
+
+                                {/* Submit Button */}
+                                <motion.button
+                                    type="submit"
+                                    disabled={status === 'submitting'}
+                                    whileHover={status !== 'submitting' ? { scale: 1.02 } : {}}
+                                    whileTap={status !== 'submitting' ? { scale: 0.98 } : {}}
+                                    className={`w-full inline-flex items-center justify-center gap-3 px-8 py-5 bg-gradient-to-r from-jet-black to-dark-teal text-white font-semibold rounded-xl shadow-xl hover:shadow-2xl transition-all ${status === 'submitting' ? 'opacity-80 cursor-wait' : ''}`}
+                                >
+                                    {status === 'submitting' ? (
+                                        <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    ) : (
+                                        <>
+                                            <span>Send Message</span>
+                                            <ArrowRight className="w-5 h-5" />
+                                        </>
+                                    )}
+                                </motion.button>
+                            </form>
+                        )}
                     </motion.div>
                 </div>
             </div>
