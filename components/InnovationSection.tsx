@@ -12,7 +12,7 @@ export default function InnovationSection() {
             {/* Full-width image - No Dark Filter */}
             <div className="absolute inset-0">
                 <Image
-                    src="/images/phytonatural bud hero final web.jpg"
+                    src="/images/phytonatural bud hero final web copy.webp"
                     alt="Innovation - Cannabis plant and product"
                     fill
                     className="object-cover object-[30%_center]"

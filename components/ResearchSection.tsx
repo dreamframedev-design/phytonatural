@@ -18,7 +18,7 @@ export default function ResearchSection() {
             {/* Parallax Background */}
             <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
                 <Image
-                    src="/images/lab hero female scientist.jpg"
+                    src="/images/lab hero female scientist copy.webp"
                     alt="Research - Scientist in laboratory"
                     fill
                     className="object-cover"

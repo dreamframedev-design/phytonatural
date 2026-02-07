@@ -9,7 +9,7 @@ export default function Footer() {
             {/* Background Image Layer */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="/images/phytofooter.png"
+                    src="/images/phytofooter copy.webp"
                     alt="Footer Background"
                     fill
                     className="object-cover object-center opacity-100"

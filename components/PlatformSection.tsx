@@ -25,7 +25,7 @@ export default function PlatformSection() {
                             {/* Circular clip */}
                             <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl border-4 border-white">
                                 <Image
-                                    src="/images/phyto building final.jpg"
+                                    src="/images/phyto building final copy.webp"
                                     alt="PhytoNatural production facility"
                                     fill
                                     className="object-cover hover:scale-105 transition-transform duration-700"

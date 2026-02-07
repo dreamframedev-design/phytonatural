@@ -1,20 +1,26 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Lock } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const navLinks = [
   { label: 'Research', href: '#research' },
   { label: 'Innovation', href: '#innovation' },
   { label: 'Platform', href: '#platform' },
-  { label: 'Investors', href: '/deal' },
+  // { label: 'Investors', href: '/deal' }, // Removed direct link
   { label: 'Contact', href: '#contact' },
 ];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [error, setError] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +29,23 @@ export default function Navigation() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handlePartnerAccess = () => {
+    setIsOpen(false); // Close mobile menu if open
+    setShowPassword(true);
+    setError(false);
+    setPasswordInput('');
+  };
+
+  const submitPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === 'phyto123') {
+      setShowPassword(false);
+      window.open('/docs/Vireo Doc1.pdf', '_blank');
+    } else {
+      setError(true);
+    }
+  };
 
   return (
     <>
@@ -68,16 +91,27 @@ export default function Navigation() {
                   <span className="absolute inset-0 bg-white/5 rounded-full scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 -z-10" />
                 </a>
               ))}
+
+              {/* Trigger Modal on Desktop */}
+              <button
+                onClick={handlePartnerAccess}
+                className="relative px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition-colors duration-300 group"
+              >
+                <span className="relative z-10">Investors</span>
+                <span className="absolute inset-x-0 bottom-1 h-px bg-strong-cyan scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <span className="absolute inset-0 bg-white/5 rounded-full scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300 -z-10" />
+              </button>
             </div>
 
             {/* CTA */}
             <div className="hidden lg:block shrink-0">
-              <a
-                href="/deal"
-                className="px-5 py-2 bg-gradient-to-r from-teal to-strong-cyan text-white text-sm font-bold rounded-full shadow-lg shadow-teal/20 hover:shadow-strong-cyan/40 hover:scale-105 transition-all duration-300"
+              <button
+                onClick={handlePartnerAccess}
+                className="px-5 py-2 bg-gradient-to-r from-teal to-strong-cyan text-white text-sm font-bold rounded-full shadow-lg shadow-teal/20 hover:shadow-strong-cyan/40 hover:scale-105 transition-all duration-300 flex items-center gap-2"
               >
+                <Lock className="w-3 h-3" />
                 Partner Access
-              </a>
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -115,16 +149,26 @@ export default function Navigation() {
                   {link.label}
                 </motion.a>
               ))}
-              <motion.a
-                href="/deal"
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-3xl font-light text-white hover:text-strong-cyan transition-colors"
+                onClick={handlePartnerAccess}
+              >
+                Investors
+              </motion.button>
+
+              <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="mt-8 px-8 py-3 bg-gradient-to-r from-teal to-strong-cyan text-white text-lg font-bold rounded-full"
-                onClick={() => setIsOpen(false)}
+                className="mt-8 px-8 py-3 bg-gradient-to-r from-teal to-strong-cyan text-white text-lg font-bold rounded-full flex items-center gap-2"
+                onClick={handlePartnerAccess}
               >
+                <Lock className="w-5 h-5" />
                 Partner Access
-              </motion.a>
+              </motion.button>
             </div>
 
             <button
@@ -133,6 +177,62 @@ export default function Navigation() {
             >
               <X className="w-8 h-8" />
             </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Password Modal */}
+      <AnimatePresence>
+        {showPassword && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-jet-black/80 backdrop-blur-lg"
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="bg-white/10 border border-white/10 p-8 rounded-3xl max-w-sm w-full shadow-2xl relative"
+            >
+              <button
+                onClick={() => setShowPassword(false)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="text-center mb-6">
+                <div className="w-12 h-12 rounded-full bg-teal/20 flex items-center justify-center mx-auto mb-4 text-teal">
+                  <Lock className="w-6 h-6" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">Partner Access</h3>
+                <p className="text-slate-400 text-sm">Please enter the access code to view the deal document.</p>
+              </div>
+
+              <form onSubmit={submitPassword} className="space-y-4">
+                <div>
+                  <input
+                    type="password"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                    placeholder="Enter Code"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-teal focus:ring-1 focus:ring-teal transition-all text-center tracking-widest"
+                    autoFocus
+                  />
+                  {error && (
+                    <p className="text-red-400 text-xs text-center mt-2">Incorrect access code. Please try again.</p>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-gradient-to-r from-teal to-strong-cyan text-white font-bold rounded-xl shadow-lg shadow-teal/20 hover:scale-[1.02] transition-all duration-300"
+                >
+                  Access Document
+                </button>
+              </form>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

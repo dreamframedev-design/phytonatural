@@ -33,7 +33,7 @@ export default function Hero() {
             {/* 3D Depth Logo - Massive Background Element */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 0.03, scale: 1, rotate: 360 }}
+                animate={{ opacity: 0.12, scale: 1, rotate: 360 }}
                 transition={{
                     opacity: { duration: 2 },
                     scale: { duration: 2 },
