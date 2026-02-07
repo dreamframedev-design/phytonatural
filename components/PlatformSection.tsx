@@ -12,15 +12,16 @@ export default function PlatformSection() {
 
             <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
                 <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-                    {/* Left: Circular Image */}
+                    {/* Left: Circular Image - Magnetic Hover */}
                     <motion.div
                         initial={{ opacity: 0, x: -40, rotate: -5 }}
                         whileInView={{ opacity: 1, x: 0, rotate: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, ease: 'easeOut' }}
                         className="relative"
+                        whileHover={{ scale: 1.05, rotate: 2 }}
                     >
-                        <div className="relative w-full max-w-[550px] mx-auto aspect-square">
+                        <div className="relative w-full max-w-[550px] mx-auto aspect-square cursor-pointer">
                             {/* Circular clip */}
                             <div className="absolute inset-0 rounded-full overflow-hidden shadow-2xl border-4 border-white">
                                 <Image

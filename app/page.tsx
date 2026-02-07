@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import ResearchSection from "@/components/ResearchSection";
+import BentoGrid from "@/components/BentoGrid";
 import InnovationSection from "@/components/InnovationSection";
 import PlatformSection from "@/components/PlatformSection";
 import ContactSection from "@/components/ContactSection";
@@ -12,6 +13,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <ResearchSection />
+      <BentoGrid />
       <InnovationSection />
       <PlatformSection />
       <ContactSection />
